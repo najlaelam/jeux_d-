@@ -7,12 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace New_Appli
 {
     public partial class Form1 : Form
     {
         Random r = new Random();
+        
+        
+        DataSet da;
         public Form1()
         {
             InitializeComponent();
@@ -126,13 +130,85 @@ namespace New_Appli
                         break;
                 }
             }
+
+            string ChercherJeux = comboBox4_Chercher_Jeux.SelectedItem.ToString();
             
+            
+            string req = string.Format("SELECT nombreDe,nombreFace,typeDe FROM groupe WHERE nomGroupe = " + ChercherJeux + "");
+            
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            string req = string.Format("select nomGroupe from groupe");
+            SqlCommand cmd = new SqlCommand(req, cn.cnx);
+            cn.cnx.Open();
+            SqlDataReader rd = cmd.ExecuteReader();
+            while (rd.Read())
+            {
+                comboBox4_Chercher_Jeux.Items.Add(rd["nomGroupe"]);
+            }
+            rd.Close();
+            cn.cnx.Close();
+
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (textBox1.Text == "" && comboBox2.Text == "" && comboBox1.Text == "" && comboBox3.Text == "")
+            {
+                MessageBox.Show("Merci de remplir tous les champs.");
+
+
+            }
+            if (textBox1.Text == "" )
+            {
+                MessageBox.Show("Merci de saisir le nom du Jeux");
+
+
+            }
+            else
+            {
+
+
+                string req = string.Format("insert into groupe values  ('" + textBox1.Text + "'," + comboBox1.SelectedItem.ToString() + "," + comboBox2.SelectedItem.ToString() + ",'" + comboBox3.SelectedItem.ToString() + "')");
+                SqlCommand cd = new SqlCommand(req, cn.cnx);
+                cn.cnx.Open();
+                cd.ExecuteNonQuery();
+                cn.cnx.Close();
+                MessageBox.Show("Saved");
+                
+
+
+
+
+            }
 
 
 
         }
 
-        private void pictureBox4_Click(object sender, EventArgs e)
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox4_Chercher_Jeux_SelectedIndexChanged(object sender, EventArgs e)
         {
 
         }
